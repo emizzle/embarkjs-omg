@@ -1,0 +1,55 @@
+{
+  "name": "embark-omg",
+  "version": "1.0.0",
+  "description": "OmiseGO plugin for Embark",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint src/",
+    "babel": "npm run babel:node",
+    "babel:node": "cross-env BABEL_ENV=node babel --out-dir dist src --source-maps",
+    "build": "npm run clean && npm run babel",
+    "clean": "rimraf dist embark-status-*.tgz package",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emizzle/embark-omg.git"
+  },
+  "keywords": [
+    "Embark",
+    "OmiseGO",
+    "blockchain"
+  ],
+  "author": "eric.mastro@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emizzle/embark-omg/issues"
+  },
+  "homepage": "https://github.com/emizzle/embark-omg#readme",
+  "dependencies": {
+    "@babel/runtime-corejs2": "7.3.1",
+    "@omisego/omg-js": "1.2.2",
+    "@omisego/omg-js-childchain": "1.2.1",
+    "@omisego/omg-js-rootchain": "1.2.2",
+    "@omisego/omg-js-util": "1.2.1",
+    "embark-utils": "^4.1.0-beta.2",
+    "ethers": "4.0.28"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.2.2",
+    "@babel/plugin-transform-runtime": "7.4.0",
+    "@babel/preset-env": "7.4.1",
+    "cross-env": "5.2.0",
+    "eslint": "4.19.1",
+    "rimraf": "2.6.2"
+  },
+  "engines": {
+    "node": ">=8.11.3"
+  }
+}
