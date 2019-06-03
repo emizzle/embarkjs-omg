@@ -9,12 +9,12 @@
   ],
   "scripts": {
     "lint": "./node_modules/.bin/eslint src/",
-    "babel": "npm run babel:node",
-    "babel:node": "cross-env BABEL_ENV=node babel --out-dir dist src --source-maps",
-    "build": "npm run clean && npm run babel",
+    "babel": "cross-env BABEL_ENV=node babel --out-dir dist src --source-maps",
+    "build": "npm run babel",
     "clean": "rimraf dist embark-status-*.tgz package",
     "prepare": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npm run clean && npm run babel -- --verbose --watch"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "@omisego/omg-js-childchain": "1.2.1",
     "@omisego/omg-js-rootchain": "1.2.2",
     "@omisego/omg-js-util": "1.2.1",
+    "async": "3.0.1",
     "embark-utils": "^4.1.0-beta.2",
     "ethers": "4.0.28"
   },

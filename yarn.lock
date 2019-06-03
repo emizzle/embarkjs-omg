@@ -629,7 +629,7 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@omisego/omg-js-childchain@1.2.2", "@omisego/omg-js-childchain@^1.2.1":
+"@omisego/omg-js-childchain@1.2.1", "@omisego/omg-js-childchain@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@omisego/omg-js-childchain/-/omg-js-childchain-1.2.1.tgz#7fd83af2e47ae7936fd9743c5a98244c89f64222"
   integrity sha512-UuYc0w8xTZPceDUnuWXV46MhPMUmu9+ecTbEh0sd5YSx9N9ie+t2FRikvvTH9g4+GBmQRoI0XCkFBU/pW3SJkA==
@@ -648,7 +648,7 @@
     "@omisego/omg-js-util" "^1.2.1"
     debug "^4.0.1"
 
-"@omisego/omg-js-util@1.2.2", "@omisego/omg-js-util@^1.2.1":
+"@omisego/omg-js-util@1.2.1", "@omisego/omg-js-util@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@omisego/omg-js-util/-/omg-js-util-1.2.1.tgz#7495f6835681a3096cc54dabb8c0495bc37d22ec"
   integrity sha512-14YTB/hycMSgGnZ/SLKiu0KA9qqwc7mTvyGfO6VE2DonX6uDrYRqmbWX0wDnk3A1hWoVLPiqG7CLBNbkOnhsKg==
@@ -871,6 +871,11 @@ async-limiter@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
   integrity sha512-jp/uFnooOiO+L211eZOoSyzpOITMXx1rBITauYykG3BRYPu8h0UcxsPNB04RR5vo4Tyz3+ay17tR6JVf9qzYWg==
+
+async@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.0.1.tgz#dfeb34657d1e63c94c0eee424297bf8a2c9a8182"
+  integrity sha512-ZswD8vwPtmBZzbn9xyi8XBQWXH3AvOQ43Za1KWYq7JeycrZuUYzx01KvHcVbXltjqH4y0MWrQ33008uLTqXuDw==
 
 async@~1.5.2:
   version "1.5.2"
