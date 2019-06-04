@@ -66,7 +66,7 @@ class EmbarkOmg {
 
   async init() {
     try {
-       if (this.initing) {
+      if (this.initing) {
         const message = "Already intializing the Plasma chain, please wait...";
         this.logger.error(message);
         throw new Error(message);
@@ -215,6 +215,39 @@ class EmbarkOmg {
     }
   }
 
+  async exitChildChain(fromAddress) {
+    const utxos = await this.childChain.getUtxos(fromAddress);
+    if (utxos.length <= 0) {
+      const message = `No UTXOs found on the Plasma chain for ${fromAddress}.`;
+      this.logger.error(message);
+      throw new Error(message);
+    }
+    // NB This only exits the first UTXO.
+    // Selecting _which_ UTXO to exit is left as an exercise for the reader...
+    utxos.forEach(async (utxo) => {
+      const exitData = await this.childChain.getExitData(utxo);
+
+      try {
+        let receipt = await this.rootChain.startStandardExit(
+          exitData.utxo_pos.toString(),
+          exitData.txbytes,
+          exitData.proof,
+          {
+            from: fromAddress
+          }
+        );
+        const message = `Exited UTXO from address ${fromAddress} with value ${utxo.amount}. View the transaction: https://rinkeby.etherscan.io/tx/${receipt.transactionHash}`;
+        this.logger.info(message);
+        return message;
+      }
+      catch (e) {
+        const message = `Error exiting the Plasma chain for UTXO ${JSON.stringify(utxo)}: ${e}`;
+        this.logger.error(message);
+        throw new Error(message);
+      }
+    });
+  }
+
   registerConsoleCommands() {
     this.embark.registerConsoleCommand({
       description: `Initialises the Plasma chain using the account configured in the DApp's blockchain configuration. All transactions on the child chain will use this as the 'from' account.`,
@@ -226,10 +259,10 @@ class EmbarkOmg {
           return callback("The Plasma chain is already initialized. If you'd like to reinitialize the chain, use the --force option ('plasma init --force')."); // passes a message back to cockpit console
         }
         this.init()
-        .then((message) => {
-          callback(null, message);
-        })
-        .catch(callback);
+          .then((message) => {
+            callback(null, message);
+          })
+          .catch(callback);
       }
     });
 
@@ -249,10 +282,10 @@ class EmbarkOmg {
           return callback("Invalid command format, please use the format 'plasma deposit [amount]', ie 'plasma deposit 100000'");
         }
         this.deposit(matches[1])
-        .then((message) => {
-          callback(null, message);
-        })
-        .catch(callback);
+          .then((message) => {
+            callback(null, message);
+          })
+          .catch(callback);
       }
     });
 
@@ -272,10 +305,33 @@ class EmbarkOmg {
           return callback("Invalid command format, please use the format 'plasma send [to_address] [amount]', ie 'plasma send 0x38d5beb778b6e62d82e3ba4633e08987e6d0f990 555'");
         }
         this.txChildChain(matches[1], matches[2])
-        .then((message) => {
-          callback(null, message);
-        })
-        .catch(callback);
+          .then((message) => {
+            callback(null, message);
+          })
+          .catch(callback);
+      }
+    });
+
+    const exitRegex = /^plasma[\s]+exit[\s]+(0x[0-9,a-f,A-F]{40,40})$/;
+    this.embark.registerConsoleCommand({
+      description: "Exits the ETH from the Plasma chain to the Rinkeby chain.",
+      matches: (cmd) => {
+        return exitRegex.test(cmd);
+      },
+      usage: "plasma exit [plasma_chain_address]",
+      process: (cmd, callback) => {
+        if (!this.inited) {
+          return callback("The Plasma chain has not been initialized. Please initialize the Plamsa chain using 'plasma init' before continuting."); // passes a message back to cockpit console
+        }
+        const matches = cmd.match(exitRegex) || [];
+        if (matches.length <= 1) {
+          return callback("Invalid command format, please use the format 'plasma exit [plasma_chain_address]', ie 'plasma exit 0x38d5beb778b6e62d82e3ba4633e08987e6d0f990'");
+        }
+          this.exitChildChain(matches[1]).then((message) => {
+            callback(null, message);
+          }).catch((e) => {
+            callback(e.message);
+          });
       }
     });
   }
