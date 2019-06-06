@@ -113,7 +113,7 @@ export default class BaseEmbarkOmg {
     }
   }
 
-  async txChildChain(toAddress, val) {
+  async send(toAddress, val) {
     //const val = "555";
     // const toAddress = "0x38d5beb778b6e62d82e3ba4633e08987e6d0f990";
     const utxos = await this.childChain.getUtxos(this.address);
@@ -168,7 +168,7 @@ export default class BaseEmbarkOmg {
     }
   }
 
-  async exitChildChain(fromAddress) {
+  async exit(fromAddress) {
     const utxos = await this.childChain.getUtxos(fromAddress);
     if (utxos.length <= 0) {
       const message = `No UTXOs found on the Plasma chain for ${fromAddress}.`;
