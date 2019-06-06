@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/emizzle/.nvm/versions/node/v10.5.0/bin/node /Users/emizzle/.yarn/bin/yarn.js add ethers/utils/bignumber --save
+  /Users/emizzle/.nvm/versions/node/v10.5.0/bin/node /Users/emizzle/.yarn/bin/yarn.js watch
 
 PATH: 
   /Users/emizzle/.opam/default/bin:/Users/emizzle/.yarn/bin:/Users/emizzle/.config/yarn/global/node_modules/.bin:/usr/local/sbin:/Users/emizzle/.nvm/versions/node/v10.5.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Xamarin Workbooks.app/Contents/SharedSupport/path-bin:/Users/emizzle/.yarn/bin:/Users/emizzle/.config/yarn/global/node_modules/.bin:/usr/local/sbin:/Users/emizzle/.opam/default/bin:/Users/emizzle/go/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/emizzle/go/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
@@ -14,17 +14,12 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/ethers%2futils/bignumber: Request "https://registry.yarnpkg.com/ethers%2futils/bignumber" returned a 405
-      at Request.params.callback [as _callback] (/Users/emizzle/.yarn/lib/cli.js:66100:18)
-      at Request.self.callback (/Users/emizzle/.yarn/lib/cli.js:129590:22)
-      at Request.emit (events.js:182:13)
-      at Request.<anonymous> (/Users/emizzle/.yarn/lib/cli.js:130562:10)
-      at Request.emit (events.js:182:13)
-      at IncomingMessage.<anonymous> (/Users/emizzle/.yarn/lib/cli.js:130484:12)
-      at Object.onceWrapper (events.js:273:13)
-      at IncomingMessage.emit (events.js:187:15)
-      at endReadableNT (_stream_readable.js:1081:12)
-      at process._tickCallback (internal/process/next_tick.js:63:19)
+  SyntaxError: /Users/emizzle/Code/__Github/emizzle/embark-omg/package.json: Unexpected token / in JSON at position 736
+      at JSON.parse (<anonymous>)
+      at /Users/emizzle/.yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/emizzle/.yarn/lib/cli.js:304:30)
+      at /Users/emizzle/.yarn/lib/cli.js:315:13
 
 npm manifest: 
   {
@@ -38,12 +33,20 @@ npm manifest:
     ],
     "scripts": {
       "lint": "./node_modules/.bin/eslint src/",
-      "babel": "npm run babel:node",
-      "babel:node": "cross-env BABEL_ENV=node babel --out-dir dist src --source-maps",
-      "build": "npm run clean && npm run babel",
-      "clean": "rimraf dist embark-status-*.tgz package",
-      "prepare": "npm run build",
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "babel": "cross-env BABEL_ENV=node babel --out-dir dist src --source-maps",
+      "build": "npm-run-all build:**",
+      "build:browser": "cross-env BABEL_ENV=browser babel src --extensions \".js\" --out-dir dist/browser --root-mode upward",
+      "build:node": "cross-env BABEL_ENV=node babel src --extensions \".js\" --out-dir dist --root-mode upward --source-maps",
+      "build:node:async": "cross-env BABEL_ENV=node:async babel src/node --extensions \".js\" --out-dir dist --root-mode upward --source-maps",
+      // "build:node:test": "cross-env BABEL_ENV=node:test babel test --extensions \".js\" --out-dir build-test --root-mode upward --source-maps",
+      "ci": "npm run qa",
+      "clean": "npm run reset",
+      "package": "npm pack",
+      "qa": "npm-run-all build test package",
+      "reset": "npx rimraf .nyc_output build-test coverage dist embarkjs-*.tgz package",
+      "start": "npm run watch",
+      // "test": "nyc --reporter=html --reporter=json mocha \"build-test/**/*.js\" --exit --no-timeouts --require source-map-support/register",
+      "watch": "run-p \"build:** -- --verbose --watch\""
     },
     "repository": {
       "type": "git",
@@ -61,18 +64,20 @@ npm manifest:
     },
     "homepage": "https://github.com/emizzle/embark-omg#readme",
     "dependencies": {
-      "@babel/runtime-corejs2": "7.3.1",
       "@omisego/omg-js": "1.2.2",
-      "@omisego/omg-js-childchain": "2.0.0-v0.2",
-      "@omisego/omg-js-rootchain": "2.0.0-v0.2",
-      "@omisego/omg-js-util": "2.0.0-v0.2",
-      "embark-utils": "^4.1.0-beta.2"
+      "@omisego/omg-js-childchain": "1.2.1",
+      "@omisego/omg-js-rootchain": "1.2.2",
+      "@omisego/omg-js-util": "1.2.1",
+      "async": "3.0.1",
+      "embark-utils": "^4.1.0-beta.2",
+      "ethers": "4.0.28"
     },
     "devDependencies": {
       "@babel/cli": "7.2.3",
       "@babel/core": "7.2.2",
       "@babel/plugin-transform-runtime": "7.4.0",
       "@babel/preset-env": "7.4.1",
+      "@babel/runtime-corejs2": "7.3.1",
       "cross-env": "5.2.0",
       "eslint": "4.19.1",
       "rimraf": "2.6.2"
@@ -717,18 +722,7 @@ Lockfile:
       lodash "^4.17.11"
       to-fast-properties "^2.0.0"
   
-  "@omisego/omg-js-childchain@2.0.0-v0.2":
-    version "2.0.0-v0.2"
-    resolved "https://registry.yarnpkg.com/@omisego/omg-js-childchain/-/omg-js-childchain-2.0.0-v0.2.tgz#d2c2e1af48a8c00a68902db6107e1da824701b86"
-    integrity sha512-hz9U2xPg/xFbdBxUIqXfDjfA8JKIegMnG757d6b3h3Ot2kGvPL+0GK59JoMYwOG64J5uaco5HZ7NnnGfjQ5Aqw==
-    dependencies:
-      "@omisego/omg-js-util" "^2.0.0-v0.2"
-      debug "^4.0.1"
-      json-bigint "^0.3.0"
-      node-fetch "^2.2.0"
-      rlp "^2.1.0"
-  
-  "@omisego/omg-js-childchain@^1.2.1":
+  "@omisego/omg-js-childchain@1.2.1", "@omisego/omg-js-childchain@^1.2.1":
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/@omisego/omg-js-childchain/-/omg-js-childchain-1.2.1.tgz#7fd83af2e47ae7936fd9743c5a98244c89f64222"
     integrity sha512-UuYc0w8xTZPceDUnuWXV46MhPMUmu9+ecTbEh0sd5YSx9N9ie+t2FRikvvTH9g4+GBmQRoI0XCkFBU/pW3SJkA==
@@ -739,15 +733,7 @@ Lockfile:
       node-fetch "^2.2.0"
       rlp "^2.1.0"
   
-  "@omisego/omg-js-rootchain@2.0.0-v0.2":
-    version "2.0.0-v0.2"
-    resolved "https://registry.yarnpkg.com/@omisego/omg-js-rootchain/-/omg-js-rootchain-2.0.0-v0.2.tgz#05ebbe6ee4e583a25f26c041a8d52b1084857b8c"
-    integrity sha512-QRsipPvozaImfO8ifPOh9w/GmOHT9hr9mdBWtRtZ3AqBOru10QG9gHF9vSQTsCDjr0jsAnoqHC/s/wuuDVfvbg==
-    dependencies:
-      "@omisego/omg-js-util" "^2.0.0-v0.2"
-      debug "^4.0.1"
-  
-  "@omisego/omg-js-rootchain@^1.2.2":
+  "@omisego/omg-js-rootchain@1.2.2", "@omisego/omg-js-rootchain@^1.2.2":
     version "1.2.2"
     resolved "https://registry.yarnpkg.com/@omisego/omg-js-rootchain/-/omg-js-rootchain-1.2.2.tgz#630ad267f0ad6b2e44098790be9acb8816413032"
     integrity sha512-vgyVfUDnyVeoe0XUv7hM13kHXqdJyEghqHEV07GyTr69QfzbFfTe9jzMceLAb5f+4Y/E5gLgU1Vqlt7lNGctUQ==
@@ -755,18 +741,7 @@ Lockfile:
       "@omisego/omg-js-util" "^1.2.1"
       debug "^4.0.1"
   
-  "@omisego/omg-js-util@2.0.0-v0.2", "@omisego/omg-js-util@^2.0.0-v0.2":
-    version "2.0.0-v0.2"
-    resolved "https://registry.yarnpkg.com/@omisego/omg-js-util/-/omg-js-util-2.0.0-v0.2.tgz#30b5882cc8a45446e7206576240caade614c8590"
-    integrity sha512-J5J5Q2XC7ZkpfQJiXJxii/66Tn3x4rhnhky3BmL++XEBoK6I34wgWMs/7dzsejWNHmmhGv/M/OZb+QBI+HlvlA==
-    dependencies:
-      eth-sig-util "^2.1.1"
-      ethereumjs-util "^6.0.0"
-      js-sha3 "^0.8.0"
-      number-to-bn "^1.7.0"
-      rlp "^2.2.2"
-  
-  "@omisego/omg-js-util@^1.2.1":
+  "@omisego/omg-js-util@1.2.1", "@omisego/omg-js-util@^1.2.1":
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/@omisego/omg-js-util/-/omg-js-util-1.2.1.tgz#7495f6835681a3096cc54dabb8c0495bc37d22ec"
     integrity sha512-14YTB/hycMSgGnZ/SLKiu0KA9qqwc7mTvyGfO6VE2DonX6uDrYRqmbWX0wDnk3A1hWoVLPiqG7CLBNbkOnhsKg==
@@ -989,6 +964,11 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
     integrity sha512-jp/uFnooOiO+L211eZOoSyzpOITMXx1rBITauYykG3BRYPu8h0UcxsPNB04RR5vo4Tyz3+ay17tR6JVf9qzYWg==
+  
+  async@3.0.1:
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/async/-/async-3.0.1.tgz#dfeb34657d1e63c94c0eee424297bf8a2c9a8182"
+    integrity sha512-ZswD8vwPtmBZzbn9xyi8XBQWXH3AvOQ43Za1KWYq7JeycrZuUYzx01KvHcVbXltjqH4y0MWrQ33008uLTqXuDw==
   
   async@~1.5.2:
     version "1.5.2"
@@ -2261,6 +2241,22 @@ Lockfile:
       hash.js "1.1.3"
       js-sha3 "0.5.7"
       scrypt-js "2.0.3"
+      setimmediate "1.0.4"
+      uuid "2.0.1"
+      xmlhttprequest "1.8.0"
+  
+  ethers@4.0.28:
+    version "4.0.28"
+    resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.28.tgz#74d9acb57f4ede3337c8d60476b38d0fe646af01"
+    integrity sha512-5JTHrPoFLqf+xCAI3pKwXSOgWBSJJoAUdPtPLr1ZlKbSKiIFMkPlRNovmZS3jhIw5sHW1YoVWOaJ6ZR2gKRbwg==
+    dependencies:
+      "@types/node" "^10.3.2"
+      aes-js "3.0.0"
+      bn.js "^4.4.0"
+      elliptic "6.3.3"
+      hash.js "1.1.3"
+      js-sha3 "0.5.7"
+      scrypt-js "2.0.4"
       setimmediate "1.0.4"
       uuid "2.0.1"
       xmlhttprequest "1.8.0"
@@ -4597,6 +4593,11 @@ Lockfile:
     version "2.0.3"
     resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-2.0.3.tgz#bb0040be03043da9a012a2cea9fc9f852cfc87d4"
     integrity sha1-uwBAvgMEPamgEqLOqfyfhSz8h9Q=
+  
+  scrypt-js@2.0.4:
+    version "2.0.4"
+    resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-2.0.4.tgz#32f8c5149f0797672e551c07e230f834b6af5f16"
+    integrity sha512-4KsaGcPnuhtCZQCxFxN3GVYIhKFPTdLd8PLC552XwbMndtD0cjRFAhDuuydXQ0h08ZfPgzqe6EKHozpuH74iDw==
   
   scrypt.js@0.2.0:
     version "0.2.0"
