@@ -9,7 +9,8 @@ package
 .vscode
 .eslintrc.json
 
-embark-omg-*.tgz
+embarkjs-omg-*.tgz
 NOTES
 npm-debug.log
+yarn-error.log
 TODO
