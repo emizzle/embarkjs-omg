@@ -29,7 +29,7 @@
     "reset": "npx rimraf .nyc_output build-test coverage dist embarkjs-omg-*.tgz package",
     "start": "npm run watch",
     "// test": "nyc --reporter=html --reporter=json mocha \"build-test/**/*.js\" --exit --no-timeouts --require source-map-support/register",
-    "watch": "run-p \"build:** --verbose --watch\""
+    "watch": "run-p \"build:** -- --verbose --watch\""
   },
   "repository": {
     "type": "git",
