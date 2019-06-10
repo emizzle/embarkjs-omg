@@ -187,7 +187,9 @@ export default class BaseEmbarkOmg {
           exitData.txbytes,
           exitData.proof,
           {
-            from: fromAddress
+            from: fromAddress,
+            privateKey: this.addressPrivateKey
+
           }
         );
         const message = `Exited UTXO from address ${fromAddress} with value ${utxo.amount}. View the transaction: https://rinkeby.etherscan.io/tx/${receipt.transactionHash}`;
