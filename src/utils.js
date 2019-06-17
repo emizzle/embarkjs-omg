@@ -2,7 +2,7 @@ import BigNumber from "bn.js";
 import { transaction } from "@omisego/omg-js-util";
 
 const DEFAULT_INTERVAL = 1000;
-const DEFAULT_BLOCKS_TO_WAIT = 1;
+const DEFAULT_BLOCKS_TO_WAIT = 13;
 
 export function confirmTransaction(web3, txnHash, options) {
   const interval = options && options.interval ? options.interval : DEFAULT_INTERVAL;
@@ -94,12 +94,12 @@ export function selectUtxos(utxos, amount, currency, includeFee) {
   }
 }
 
-export function signTypedData (web3, signer, data) {
+export function signTypedData(web3, signer, data) {
   return web3.currentProvider.send('eth_signTypedData_v3', [signer, data]);
 }
 
-export function normalizeUrl (url) {
-  if(!url.endsWith("/")) {
+export function normalizeUrl(url) {
+  if (!url.endsWith("/")) {
     url += "/";
   }
   return url;

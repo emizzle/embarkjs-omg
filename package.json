@@ -1,7 +1,7 @@
 {
-  "name": "embarkjs-omg",
+  "name": "embarkjs-plasma",
   "version": "1.0.0",
-  "description": "EmbarkJS library for the OmiseGO plugin for Embark",
+  "description": "EmbarkJS library for the OmiseGO Plasma plugin for Embark",
   "main": "dist/index.js",
   "browser": {
     "./dist/index.js": "./dist/browser/index.js",
@@ -54,7 +54,8 @@
     "@omisego/omg-js-childchain": "2.0.0-v0.2",
     "@omisego/omg-js-rootchain": "2.0.0-v0.2",
     "@omisego/omg-js-util": "2.0.0-v0.2",
-    "human-standard-token-abi": "2.0.0"
+    "human-standard-token-abi": "2.0.0",
+    "web3": "1.0.0-beta.55"
   },
   "devDependencies": {
     "@babel/cli": "7.2.3",
